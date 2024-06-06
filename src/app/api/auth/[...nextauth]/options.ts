@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
             id: 'credentials',
             name: "Credentials",
             credentials: {
-                email: {label: 'Email', type: 'email'},
+                usernameOrEmail: {label: 'usernameOrEmail', type: 'text'},
                 password: {label: 'Password', type: 'password'},
             },
             async authorize(credentials: any ): Promise<any> {
@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
                         ]
                     });
                     if(!user) {
-                        throw new Error('No user found with this email');
+                        throw new Error('No user found with this username or email');
                     };
                     if(!user.isVerified) {
                         throw new Error('Please verify your account first');
@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
                         throw new Error('Incorrect Password');
                     }
                 } catch (err: any) {
+                    console.log('Unauthorized Error:',err.message);
                     throw new Error(err);
                 }
             },  
@@ -45,7 +46,7 @@ export const authOptions: NextAuthOptions = {
             if(user) {
                 token._id = user._id?.toString();
                 token.isVerified = user.isVerified;
-                token.isAcceptingMessage = user.isAcceptingMessage;
+                token.isAcceptingMessages = user.isAcceptingMessages;
                 token.username = user.username;
             }
             return token;
@@ -53,8 +54,9 @@ export const authOptions: NextAuthOptions = {
         async session({session, token}) {
             if(token) {
                 session.user._id = token._id;
+                session.user.username = token.username;
                 session.user.isVerified = token.isVerified;
-                session.user.isAcceptingMessage = token.isAcceptingMessage;
+                session.user.isAcceptingMessages = token.isAcceptingMessages;
             }
             return session;
         },

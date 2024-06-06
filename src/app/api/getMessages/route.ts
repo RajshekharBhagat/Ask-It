@@ -3,6 +3,8 @@ import { User, getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/options";
 import mongoose from "mongoose";
 import UserModel from "@/models/user.model";
+import path from "path";
+import { MessagesPage } from "openai/resources/beta/threads/messages.mjs";
 
 export async function GET(req: Request) {
   await dbConnect();
@@ -11,18 +13,15 @@ export async function GET(req: Request) {
   const userId = new mongoose.Types.ObjectId(user._id);
   try {
     const foundUser = await UserModel.aggregate([
+      { $match: { _id: userId } },
       {
-        $match: { id: userId },
+        $unwind: {
+          path: "$messages",
+          preserveNullAndEmptyArrays: true,
+        },
       },
-      {
-        $unwind: "$message",
-      },
-      {
-        $sort: { "message.createdAt": -1 },
-      },
-      {
-        $group: { _id: "$_id", message: { $push: "$message" } },
-      },
+      { $sort: { "messages.createdAt": -1 } },
+      { $group: { _id: "$_id", messages: { $push: "$messages" } } },
     ]);
     if (!foundUser || foundUser.length === 0) {
       return Response.json(
@@ -37,7 +36,7 @@ export async function GET(req: Request) {
     }
     return Response.json({
       success: true,
-      message: foundUser[0].message,
+      messages: foundUser[0].messages,
     });
   } catch (error) {
     console.error("An unexpected error occured:", error);

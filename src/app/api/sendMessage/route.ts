@@ -3,9 +3,8 @@ import UserModel, { Message } from "@/models/user.model";
 
 export async function POST(req: Request) {
   await dbConnect();
-  const { username, content } = await req.json();
-
   try {
+    const { username, content } = await req.json();
     const user = await UserModel.findOne({ username });
     if (!user) {
       return Response.json(
@@ -18,7 +17,7 @@ export async function POST(req: Request) {
         }
       );
     }
-    if (!user.isAcceptingMessage) {
+    if (!user.isAcceptingMessages) {
       return Response.json(
         {
           success: false,
@@ -30,7 +29,7 @@ export async function POST(req: Request) {
       );
     }
     const newMessage = { content, createdAt: new Date() };
-    user.message.push(newMessage as Message);
+    user.messages.push(newMessage as Message);
     await user.save();
     return Response.json({
       success: true,
