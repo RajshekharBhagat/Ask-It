@@ -15,7 +15,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-function page() {
+function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const {toast} = useToast();
   const form = useForm<z.infer<typeof messageSchema>>({
@@ -104,4 +104,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

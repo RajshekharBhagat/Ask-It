@@ -10,15 +10,13 @@ import { Message } from "@/models/user.model";
 import { acceptMessageSchema } from "@/schemas/acceptMessageSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { Router } from "lucide-react";
 import { User } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Messages } from "openai/resources/beta/threads/messages.mjs";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-function page() {
+function Page() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setisLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
@@ -189,4 +187,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

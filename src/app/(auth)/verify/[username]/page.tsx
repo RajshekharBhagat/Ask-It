@@ -20,7 +20,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-function page() {
+function Page() {
   const [isVerifying, setIsVerifying] = useState(false);
 
   const router = useRouter();
@@ -118,4 +118,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
