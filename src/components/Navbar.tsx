@@ -14,7 +14,7 @@ function Navbar() {
             {session ? (
                 <><span>Welcome, {user.username || user.email}</span>
                 <Button onClick={() => signOut()} className="bg-black border border-neutral-300 hover:bg-neutral-950">Logout</Button></>
-            ) : (<Link href={'/sign-in'}><Button className="bg-black border border-neutral-300 hover:bg-neutral-950">Login</Button></Link>) }
+            ) : (<Link href={'/sign-up'}><Button className="bg-black border border-neutral-300 hover:bg-neutral-950">Login</Button></Link>) }
         </div>
     </nav>
   )

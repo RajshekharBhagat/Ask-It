@@ -87,7 +87,6 @@ function page() {
     [setisLoading, setMessages]
   );
 
-
   useEffect(() => {
     if (!session || !session.user) {
       return;
@@ -142,14 +141,14 @@ function page() {
   };
 
   return (
-    <main className="min-h-screen w-full bg-black p-4 md:p-6">
+    <main className="min-h-screen w-full bg-black p-4 md:p-6 overflow-hidden">
       <div className="container mx-auto text-white py-5">
         <h1 className="text-3xl text-center md:text-left md:text-5xl font-semibold mb-5">
           User Dashboard
         </h1>
         <div className="mb-5 grid md:grid-cols-[1fr_2fr] items-center ">
           <h2 className="text-lg font-semibold mb-2">Copy you Unique Link</h2>
-          <div className="flex items-center">
+          <div className="flex items-center mb-6">
             <Input
               type="text"
               value={profileUrl}
@@ -164,7 +163,7 @@ function page() {
             </Button>
           </div>
         </div>
-        <div className="mb-4 flex gap-4 items-center">
+        <div className="flex gap-4 items-center mb-8">
           <Switch
             {...register("acceptMessages")}
             checked={acceptMessages}
@@ -173,8 +172,8 @@ function page() {
           />
           <span>Accept Message: {acceptMessages ? "On" : "Off"}</span>
         </div>
-        <Separator className="bg-neutral-500 mb-6" />
-        <div>
+        <Separator className="bg-neutral-500 mb-8" />
+        <div className=" max-w-3xl mx-auto space-y-6">
           {
             messages.length === 0 ? (
               <div> No Messages available</div>
