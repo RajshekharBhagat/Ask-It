@@ -45,6 +45,7 @@ function Page() {
       password: data.password,
     });
     if(result?.error) {
+      setIsLoading(false)
       toast({
         title: 'Login Failed',
         description: `${result?.error}`,
