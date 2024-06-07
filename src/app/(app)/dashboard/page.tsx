@@ -54,7 +54,7 @@ function Page() {
     } finally {
       setIsSwitchLoading(false);
     }
-  }, [setValue]);
+  }, [setValue,toast]);
 
   const fetchMessages = useCallback(
     async (refresh: boolean = false) => {
@@ -82,7 +82,7 @@ function Page() {
         setisLoading(false);
       }
     },
-    [setisLoading, setMessages]
+    [setisLoading, setMessages,toast]
   );
 
   useEffect(() => {
@@ -176,8 +176,8 @@ function Page() {
             messages.length === 0 ? (
               <div> No Messages available</div>
             ) : (
-              messages.map((message : Message) => (
-                <MessageCard message={message} onMessageDelete={() =>handleDeleteMessage(message._id as string)}  />
+              messages.map((message : Message,index) => (
+                <MessageCard key={index} message={message} onMessageDelete={() =>handleDeleteMessage(message._id as string)}  />
               ))
             )
           }
