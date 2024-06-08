@@ -41,9 +41,10 @@ function Page() {
     const getOtp = async () => {
       try {
         const response = await axios.get(`/api/getUser?username=${params.username}`);
+        const otp = response.data.user.verifyCode;
         toast({
           title: 'Your Otp',
-          description: response.data.user.verifyCode,
+          description: otp,
         })
         
       } catch (error) {
@@ -51,7 +52,8 @@ function Page() {
         const axiosError = error as AxiosError<ApiResponse>;
         toast({
           title: 'Failed to get Otp',
-          description: axiosError.response?.data.message
+          description: axiosError.response?.data.message,
+          variant: 'destructive',
         })
       }
     }
