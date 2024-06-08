@@ -41,25 +41,37 @@ function Page() {
     const getOtp = async () => {
       try {
         const response = await axios.get(`/api/getUser?username=${params.username}`);
-        console.log(response);
-        const otp = response.data.user.verifyCode;
-        toast({
-          title: 'Your Otp',
-          description: otp,
-        })
-        
+        console.log('API Response:', response);
+
+        if (response.data && response.data.success) {
+          const otp = response.data.user.verifyCode;
+
+          toast({
+            title: 'Your OTP',
+            description: otp,
+          });
+        } else {
+          console.error('User or verifyCode not found in the response');
+          toast({
+            title: 'Failed to get OTP',
+            description: response.data.message || 'User or verifyCode not found in the response',
+            variant: 'destructive',
+          });
+        }
       } catch (error) {
-        console.log('Error while fetching user: ',error);
-        const axiosError = error as AxiosError<ApiResponse>;
+        console.error('Error while fetching user:', error);
+        const axiosError = error as AxiosError<{ message: string }>;
         toast({
-          title: 'Failed to get Otp',
-          description: axiosError.response?.data.message,
+          title: 'Failed to get OTP',
+          description: axiosError.response?.data?.message || 'An unknown error occurred',
           variant: 'destructive',
-        })
+        });
       }
-    }
-    getOtp()
-  }, [toast])
+    };
+
+    getOtp();
+  }, [params.username, toast]);
+
   
   const onSubmit = async (data: z.infer<typeof verifySchema>) => {
     try {
