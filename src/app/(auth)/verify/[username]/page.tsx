@@ -41,6 +41,7 @@ function Page() {
     const getOtp = async () => {
       try {
         const response = await axios.get(`/api/getUser?username=${params.username}`);
+        console.log(response);
         const otp = response.data.user.verifyCode;
         toast({
           title: 'Your Otp',
