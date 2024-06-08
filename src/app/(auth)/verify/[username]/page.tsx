@@ -15,14 +15,17 @@ import { verifySchema } from "@/schemas/verifySchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
+import { User } from "next-auth";
+import { useSession } from "next-auth/react";
+import { PathParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 function Page() {
-  const [isVerifying, setIsVerifying] = useState(false);
 
+  const [isVerifying, setIsVerifying] = useState(false);
   const router = useRouter();
   const params = useParams<{ username: string }>();
   const { toast } = useToast();
@@ -33,6 +36,28 @@ function Page() {
     },
   });
 
+
+  useEffect(() => {
+    const getOtp = async () => {
+      try {
+        const response = await axios.get(`/api/getUser?username=${params.username}`);
+        toast({
+          title: 'Your Otp',
+          description: response.data.user.verifyCode,
+        })
+        
+      } catch (error) {
+        console.log('Error while fetching user: ',error);
+        const axiosError = error as AxiosError<ApiResponse>;
+        toast({
+          title: 'Failed to get Otp',
+          description: axiosError.response?.data.message
+        })
+      }
+    }
+    getOtp()
+  }, [toast])
+  
   const onSubmit = async (data: z.infer<typeof verifySchema>) => {
     try {
         setIsVerifying(true);
